@@ -25,7 +25,7 @@ public class MenuActivity extends Activity implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.menu_layout);
+        setContentView(R.layout.menu_layout2);
         putongModeLayout = (RelativeLayout) findViewById(R.id.putongMode_layout);
         mubiaoModeLayout = (RelativeLayout) findViewById(R.id.mubiaoMode_layout);
         //jianzhiModeLayout = (RelativeLayout) findViewById(R.id.jianzhiMode_layout) ;

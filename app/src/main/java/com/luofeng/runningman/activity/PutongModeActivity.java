@@ -1,9 +1,13 @@
 package com.luofeng.runningman.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocationClient;
@@ -32,8 +36,6 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     //显示地图需要的变量
     private MapView mapView;//地图控件
     private AMap aMap;//地图对象
-
-
     //定位需要的声明
     private AMapLocationClient mLocationClient = null;//定位发起端
     private AMapLocationClientOption mLocationOption = null;//定位参数
@@ -41,13 +43,33 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
 
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
+    private boolean startedRun = false;
+    private int locNum = 0;
 
+    private TextView startText = null;
+    private View.OnClickListener mClickListener = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.putong_mode_layout);
 
+        startText = (TextView) findViewById(R.id.start_text);
+        startText.setOnClickListener(mClickListener);
+        mClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.start_text :
+                        Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+                        Log.d("test", "clicked");
+                        startRun();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
         //显示地图
         mapView = (MapView) findViewById(R.id.map);
         //必须要写
@@ -61,7 +83,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         //设置定位监听
         aMap.setLocationSource(this);
         // 是否显示定位按钮
-        settings.setMyLocationButtonEnabled(true);
+        settings.setMyLocationButtonEnabled(false);
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
 
@@ -73,7 +95,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         aMap.setMyLocationStyle(myLocationStyle);
 
-        //开始定位
+        //开始第一次定位
         initLoc();
 
 
@@ -93,17 +115,26 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //设置是否只定位一次,默认为false
-        mLocationOption.setOnceLocation(false);
+        //mLocationOption.setOnceLocation(false);
+        mLocationOption.setOnceLocation(true);
         //设置是否强制刷新WIFI，默认为强制刷新
         mLocationOption.setWifiActiveScan(true);
         //设置是否允许模拟位置,默认为false，不允许模拟位置
         mLocationOption.setMockEnable(false);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
+        //mLocationOption.setInterval(2000);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
         mLocationClient.startLocation();
+    }
+
+    private void startRun() {
+        mLocationOption.setOnceLocation(false);
+        mLocationOption.setInterval(2000);
+        mLocationClient.setLocationOption(mLocationOption);
+        mLocationClient.startLocation();
+        startedRun = true;
     }
 
 
@@ -132,7 +163,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                 amapLocation.getAdCode();//地区编码
 
                 // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-                if (isFirstLoc) {
+                if (isFirstLoc && !startedRun) {
                     //设置缩放级别
                     aMap.moveCamera(CameraUpdateFactory.zoomTo(19));
                     //将地图移动到定位点
@@ -144,8 +175,19 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                     //获取定位信息
                     StringBuffer buffer = new StringBuffer();
                     buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
-                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
-                    isFirstLoc = true;
+                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_SHORT).show();
+                    isFirstLoc = false;
+                } else if (!isFirstLoc && startedRun) {
+                    double latitude = amapLocation.getLatitude();
+                    double longitude = amapLocation.getLongitude();
+                    double speed = 1;
+                    if ("gps".equals(amapLocation.getProvider())) {
+                        speed = amapLocation.getSpeed();
+                    }
+                    locNum++;
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("经纬度：" + latitude + "," + longitude + "速度：" + speed + "次数：" + locNum);
+                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -159,6 +201,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
             }
         }
     }
+
 
     //激活定位
     @Override

@@ -54,7 +54,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.1">
             </RelativeLayout>
-        <!--   <RelativeLayout
+
+           <RelativeLayout
                 android:id="@+id/jianzhiMode_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -69,7 +70,7 @@
                     android:textColor="#fff"
                     android:textSize="30dp"
                     android:text="减脂模式"/>
-            </RelativeLayout>  -->
+            </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 
