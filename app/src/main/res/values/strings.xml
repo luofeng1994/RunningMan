@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RunningMan</string>
+    <string name="loc_interval">"2000"</string>
 </resources>

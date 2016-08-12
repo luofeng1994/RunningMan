@@ -28,7 +28,7 @@ public class MenuActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.menu_layout2);
         putongModeLayout = (RelativeLayout) findViewById(R.id.putongMode_layout);
         mubiaoModeLayout = (RelativeLayout) findViewById(R.id.mubiaoMode_layout);
-        //jianzhiModeLayout = (RelativeLayout) findViewById(R.id.jianzhiMode_layout) ;
+        jianzhiModeLayout = (RelativeLayout) findViewById(R.id.jianzhiMode_layout) ;
         lishiText = (TextView) findViewById(R.id.lishi_text);
         paobuText = (TextView) findViewById(R.id.paobu_text);
         gerenText = (TextView) findViewById(R.id.geren_text);
@@ -45,8 +45,8 @@ public class MenuActivity extends Activity implements View.OnClickListener{
                 break;
             case R.id.mubiaoMode_layout:
                 break;
-//            case R.id.jianzhiMode_Layout:
-//                break;
+            case R.id.jianzhiMode_layout:
+                break;
             default:
                 break;
         }

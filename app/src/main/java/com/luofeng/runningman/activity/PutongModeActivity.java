@@ -1,11 +1,14 @@
 package com.luofeng.runningman.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +17,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps2d.AMapUtils;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
@@ -23,16 +27,21 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.amap.api.maps2d.model.PolylineOptions;
 import com.luofeng.runningman.R;
+import com.luofeng.runningman.db.RunningManDB;
+import com.luofeng.runningman.model.RunRecord;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by 罗峰 on 2016/8/4.
  */
-public class PutongModeActivity extends Activity implements LocationSource, AMapLocationListener {
+public class PutongModeActivity extends Activity implements LocationSource, AMapLocationListener, View.OnClickListener, View.OnLongClickListener {
     //显示地图需要的变量
     private MapView mapView;//地图控件
     private AMap aMap;//地图对象
@@ -40,36 +49,49 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private AMapLocationClient mLocationClient = null;//定位发起端
     private AMapLocationClientOption mLocationOption = null;//定位参数
     private OnLocationChangedListener mListener = null;//定位监听器
+    private MarkerOptions markerOptions = null;
+
+    private ImageView startImage = null;
+    private Chronometer timeChronometer = null;
+    private TextView distanceText = null;
+    private TextView speedText = null;
+    private RunningManDB runningManDB;
 
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
+    private boolean isFirstRunLoc = true;
     private boolean startedRun = false;
-    private int locNum = 0;
+    private boolean paused = true;
+    private boolean isFirstClicked = true;
 
-    private TextView startText = null;
-    private View.OnClickListener mClickListener = null;
+    private int locNum = 0;
+    private double speed = 1;
+    private double distance = 0;
+    private long recordTime = 0;
+    private LatLng latLngLast = null, latLngNow = null;
+
+    private long loc_interval = 2000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.putong_mode_layout);
+        runningManDB = RunningManDB.getInstance(this);
+        initView(savedInstanceState);
+        //开始第一次定位
+        initLoc();
+    }
 
-        startText = (TextView) findViewById(R.id.start_text);
-        startText.setOnClickListener(mClickListener);
-        mClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.start_text :
-                        Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
-                        Log.d("test", "clicked");
-                        startRun();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
+    private void initView(Bundle savedInstanceState) {
+        startImage = (ImageView) findViewById(R.id.start_image);
+        startImage.setOnClickListener(this);
+        startImage.setOnLongClickListener(this);
+        timeChronometer = (Chronometer) findViewById(R.id.chronometer);
+        timeChronometer.setFormat("00:%s");
+        distanceText = (TextView) findViewById(R.id.distance_text);
+        speedText = (TextView) findViewById(R.id.speed_text);
+
         //显示地图
         mapView = (MapView) findViewById(R.id.map);
         //必须要写
@@ -87,20 +109,85 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
 
-
         //定位的小图标 默认是蓝点 这里自定义一团火，其实就是一张图片
         MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon1));
+        //myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.drawable.icon1));
         myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
         aMap.setMyLocationStyle(myLocationStyle);
-
-        //开始第一次定位
-        initLoc();
-
+        /*markerOptions = new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon1));
+        aMap.addMarker(markerOptions);*/
 
     }
 
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.start_image:
+                //第一次点击开始按钮
+                if (isFirstClicked) {
+                    startedRun = true;
+                    isFirstClicked = false;
+                    paused = false;
+                    startRun();
+                    startImage.setImageResource(R.drawable.pause);
+                    timeChronometer.setBase(SystemClock.elapsedRealtime());
+                    timeChronometer.start();
+                }
+                //暂停状态下点击图片，开始跑步,显示暂停按钮
+                else if (!isFirstClicked && startedRun && paused) {
+                    paused = false;
+                    startImage.setImageResource(R.drawable.pause);
+                    goOnRun();
+                    timeChronometer.setBase(SystemClock.elapsedRealtime() - recordTime);
+                    timeChronometer.start();
+                }
+                //跑步状态下点击图片，暂停跑步,显示开始按钮
+                else if (!isFirstClicked && startedRun && !paused) {
+                    paused = true;
+                    startImage.setImageResource(R.drawable.start);
+                    pauseRun();
+                    timeChronometer.stop();
+                    recordTime = SystemClock.elapsedRealtime() - timeChronometer.getBase();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        Log.d("test", "longclick");
+        switch (view.getId()) {
+            case R.id.start_image:
+                if (isFirstClicked) {
+                    new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您还未开始跑步").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+                } else {
+                    new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您确定要结束此次跑步吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mLocationClient.stopLocation();
+                            timeChronometer.stop();
+                            startImage.setEnabled(false);
+                            saveRecord();
+                        }
+                    }).setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+                }
+                break;
+        }
+        return true;
+    }
 
     //定位
     private void initLoc() {
@@ -130,64 +217,96 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     }
 
     private void startRun() {
-        mLocationOption.setOnceLocation(false);
-        mLocationOption.setInterval(2000);
-        mLocationClient.setLocationOption(mLocationOption);
-        mLocationClient.startLocation();
-        startedRun = true;
-    }
 
+        /*markerOptions = new MarkerOptions();
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon1));
+        aMap.addMarker(markerOptions);*/
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否只定位一次,默认为false
+        mLocationOption.setOnceLocation(false);
+        //设置是否强制刷新WIFI，默认为强制刷新
+        mLocationOption.setWifiActiveScan(true);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置
+        mLocationOption.setMockEnable(false);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(loc_interval);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+
+    }
 
     //定位回调函数
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
-
+        //PolylineOptions mPlolylineOption = new PolylineOptions();
+        Log.d("test", "location again");
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
-                //定位成功回调信息，设置相关消息
-                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
-                amapLocation.getLatitude();//获取纬度
-                amapLocation.getLongitude();//获取经度
-                amapLocation.getAccuracy();//获取精度信息
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = new Date(amapLocation.getTime());
-                df.format(date);//定位时间
-                amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
-                amapLocation.getCountry();//国家信息
-                amapLocation.getProvince();//省信息
-                amapLocation.getCity();//城市信息
-                amapLocation.getDistrict();//城区信息
-                amapLocation.getStreet();//街道信息
-                amapLocation.getStreetNum();//街道门牌号信息
-                amapLocation.getCityCode();//城市编码
-                amapLocation.getAdCode();//地区编码
-
-                // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
                 if (isFirstLoc && !startedRun) {
                     //设置缩放级别
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(19));
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
                     //将地图移动到定位点
                     aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude())));
                     //点击定位按钮 能够将地图的中心移动到定位点
                     mListener.onLocationChanged(amapLocation);
                     //添加图钉
-                    //aMap.addMarker(getMarkerOptions(amapLocation));
+                    markerOptions = new MarkerOptions();
+                    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon1));
+                    aMap.addMarker(markerOptions);
                     //获取定位信息
                     StringBuffer buffer = new StringBuffer();
                     buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
                     Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_SHORT).show();
+                    mLocationClient.stopLocation();
                     isFirstLoc = false;
                 } else if (!isFirstLoc && startedRun) {
-                    double latitude = amapLocation.getLatitude();
-                    double longitude = amapLocation.getLongitude();
-                    double speed = 1;
-                    if ("gps".equals(amapLocation.getProvider())) {
-                        speed = amapLocation.getSpeed();
+                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude())));
+                    //点击定位按钮 能够将地图的中心移动到定位点
+                    mListener.onLocationChanged(amapLocation);
+                    if (isFirstRunLoc) {
+                        markerOptions = new MarkerOptions();
+                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon1));
+                        aMap.addMarker(markerOptions);
+                        latLngLast = new LatLng(0, 0);
+                        latLngNow = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
+                        isFirstRunLoc = false;
+                    } else {
+                        LatLng tempLatLng = latLngNow.clone();
+                        latLngNow = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
+                        latLngLast = tempLatLng.clone();
+                        double distanceInterval = getDistance(latLngLast, latLngNow);
+                        if ("gps".equals(amapLocation.getProvider())) {
+                            speed = amapLocation.getSpeed();
+                        } else {
+                            speed = distanceInterval / loc_interval;
+                        }
+
+                        if (distanceInterval < 30) {
+                            PolylineOptions mPolylineOption = new PolylineOptions();
+                            mPolylineOption.add(latLngLast, latLngNow);
+                            mPolylineOption.width(15);
+                            mPolylineOption.color(Color.GREEN);
+                            aMap.addPolyline(mPolylineOption);
+
+                            DecimalFormat df = new DecimalFormat("#####0.00");
+                            distance = distance + distanceInterval;
+                            distanceText.setText(df.format(distance));
+                            speedText.setText(df.format(speed));
+                        }
+
+
                     }
-                    locNum++;
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append("经纬度：" + latitude + "," + longitude + "速度：" + speed + "次数：" + locNum);
-                    Toast.makeText(getApplicationContext(), buffer.toString(), Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -200,6 +319,30 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                 Toast.makeText(getApplicationContext(), "定位失败", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+
+    private double getDistance(LatLng pointLast,LatLng pointNow) {
+        float distance = AMapUtils.calculateLineDistance(pointLast, pointNow);
+
+        return (double)distance;
+
+   }
+
+    private void saveRecord() {
+        RunRecord runRecord = new RunRecord();
+        runRecord.setMode("普通模式");
+        runRecord.setDateTime("2016.08.12 16：44");
+        DecimalFormat df = new DecimalFormat("#####0.00");
+        runRecord.setDistance((df.format(distance)).toString());
+        runRecord.setDuration(timeChronometer.getText().toString());
+        runningManDB.saveRunRecord(runRecord);
+    }
+    private void pauseRun() {
+        mLocationClient.stopLocation();
+    }
+    private void goOnRun() {
+        mLocationClient.startLocation();
     }
 
 
@@ -252,4 +395,6 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         super.onDestroy();
         mapView.onDestroy();
     }
+
+
 }
