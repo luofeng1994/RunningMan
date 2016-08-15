@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/top" />
+
 
     <FrameLayout
         android:id="@+id/content_layout"
@@ -12,18 +14,14 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <fragment
+<!--        <fragment
             android:id="@+id/mode_fragment"
             android:name="com.luofeng.runningman.fragment.ModeFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
 
     </FrameLayout>
 
-    <fragment
-        android:id="@+id/menu_bar_fragment"
-        android:name="com.luofeng.runningman.fragment.MenuBarFragment"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+    <include layout="@layout/menu_bar" />
 
 </LinearLayout>

@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/menu_bg">
+    android:layout_height="50dp"
+    android:background="@drawable/menu_bar_bg">
 
-    <TextView
-        android:id="@+id/lishi_text"
+    <ImageView
+        android:id="@+id/lishi_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
-        android:textColor="#fff"
-        android:textSize="25sp"
-        android:text="历史"/>
-    <TextView
-        android:id="@+id/paobu_text"
+        android:src="@drawable/lishi_image"/>
+    <ImageView
+        android:id="@+id/paobu_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"
-        android:textColor="#fff"
-        android:textSize="25sp"
-        android:text="跑步"/>
-    <TextView
-        android:id="@+id/geren_text"
+        android:src="@drawable/paobu_image"/>
+    <ImageView
+        android:id="@+id/geren_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
-        android:textColor="#fff"
-        android:textSize="25sp"
-        android:text="个人"/>
+        android:src="@drawable/user_image"/>
 
 </RelativeLayout>

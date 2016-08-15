@@ -25,22 +25,17 @@
             android:value="12a3a40985bf96b4f41fb5a65590c26d" />
 
         <service android:name="com.amap.api.location.APSService" />
-
         <activity android:name=".activity.MenuActivity">
-<!--            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
-        <activity android:name=".activity.PutongModeActivity"></activity>
-        <activity android:name=".activity.MenuActivityIndex">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.PutongModeActivity"></activity>
+        <activity android:name=".activity.RecordShowActivity"></activity>
+
     </application>
 
 </manifest>

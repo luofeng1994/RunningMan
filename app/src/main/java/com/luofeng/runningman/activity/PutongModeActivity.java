@@ -67,8 +67,9 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private int locNum = 0;
     private double speed = 1;
     private double distance = 0;
-    private long recordTime = 0;
+    private long recordTime = 0;//计时使用，使得暂停开始之后计时器继续不间断计时
     private LatLng latLngLast = null, latLngNow = null;
+    private String startDateTime;
 
     private long loc_interval = 2000;
 
@@ -133,6 +134,8 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                     startImage.setImageResource(R.drawable.pause);
                     timeChronometer.setBase(SystemClock.elapsedRealtime());
                     timeChronometer.start();
+                    SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");//!!hh:mm:ss则获取的是12小时制，HH:mm:ss则获取的是24小时制
+                    startDateTime = sDateFormat.format(new java.util.Date());
                 }
                 //暂停状态下点击图片，开始跑步,显示暂停按钮
                 else if (!isFirstClicked && startedRun && paused) {
@@ -158,7 +161,6 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
 
     @Override
     public boolean onLongClick(View view) {
-        Log.d("test", "longclick");
         switch (view.getId()) {
             case R.id.start_image:
                 if (isFirstClicked) {
@@ -174,6 +176,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                         public void onClick(DialogInterface dialogInterface, int i) {
                             mLocationClient.stopLocation();
                             timeChronometer.stop();
+                            startImage.setImageResource(R.drawable.stop);
                             startImage.setEnabled(false);
                             saveRecord();
                         }
@@ -250,7 +253,6 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
         //PolylineOptions mPlolylineOption = new PolylineOptions();
-        Log.d("test", "location again");
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 if (isFirstLoc && !startedRun) {
@@ -332,7 +334,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private void saveRecord() {
         RunRecord runRecord = new RunRecord();
         runRecord.setMode("普通模式");
-        runRecord.setDateTime("2016.08.12 16：44");
+        runRecord.setDateTime(startDateTime);
         DecimalFormat df = new DecimalFormat("#####0.00");
         runRecord.setDistance((df.format(distance)).toString());
         runRecord.setDuration(timeChronometer.getText().toString());

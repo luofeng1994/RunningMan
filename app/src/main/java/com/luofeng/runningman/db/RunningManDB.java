@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.luofeng.runningman.model.RunRecord;
 
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by 罗峰 on 2016/8/12.
  */
-public class RunningManDB  {
+public class RunningManDB {
     public static final String DB_NAME = "running_man";
     public static final int VERSION = 1;
     private static RunningManDB runningManDB;
@@ -43,6 +44,8 @@ public class RunningManDB  {
     }
 
     public List<RunRecord> loadRunRecord() {
+
+
         List<RunRecord> list = new ArrayList<>();
         Cursor cursor = db.query("RunRecords", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {

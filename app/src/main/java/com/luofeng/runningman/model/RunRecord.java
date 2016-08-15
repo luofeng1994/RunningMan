@@ -1,9 +1,11 @@
 package com.luofeng.runningman.model;
 
+import java.io.Serializable;
+
 /**
  * Created by 罗峰 on 2016/8/11.
  */
-public class RunRecord {
+public class RunRecord implements Serializable{
     private int id;
     private String mode;
     private String dateTime;

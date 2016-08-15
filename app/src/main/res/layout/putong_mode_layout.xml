@@ -45,7 +45,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textColor="#D1D1D1"
                     android:textSize="20sp"
-                    android:text="距离"/>
+                    android:text="距离(米)"/>
             </LinearLayout>
 
             <LinearLayout
@@ -92,7 +92,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textColor="#D1D1D1"
                     android:textSize="20sp"
-                    android:text="速度"/>
+                    android:text="速度(米/秒)"/>
             </LinearLayout>
         </RelativeLayout>
         <ImageView
