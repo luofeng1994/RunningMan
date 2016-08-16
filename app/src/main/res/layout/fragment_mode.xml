@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        android:background="@drawable/mode_1">
-        <TextView
+        android:background="@drawable/mode_11">
+<!--        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -18,20 +18,19 @@
             android:layout_marginRight="70dp"
             android:textColor="#fff"
             android:textSize="30dp"
-            android:text="普通模式"/>
+            android:text="普通模式"/>-->
     </RelativeLayout>
-<!--    <RelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1">
-    </RelativeLayout>-->
+        android:layout_height="2dp">
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/mubiaoMode_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        android:background="@drawable/mode_2">
-        <TextView
+        android:background="@drawable/mode_21">
+<!--        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -39,21 +38,20 @@
             android:layout_marginRight="70dp"
             android:textColor="#fff"
             android:textSize="30dp"
-            android:text="目标模式"/>
+            android:text="目标模式"/>-->
     </RelativeLayout>
-<!--    <RelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1">
-    </RelativeLayout>-->
+        android:layout_height="2dp">
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/jianzhiMode_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        android:background="@drawable/mode_3">
-        <TextView
+        android:background="@drawable/mode_31">
+<!--        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -61,7 +59,7 @@
             android:layout_marginRight="70dp"
             android:textColor="#fff"
             android:textSize="30dp"
-            android:text="减脂模式"/>
+            android:text="减脂模式"/>-->
     </RelativeLayout>
 
 </LinearLayout>

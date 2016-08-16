@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="30dp"
         android:src="@drawable/lishi_image"/>
     <ImageView
         android:id="@+id/paobu_image"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="30dp"
         android:src="@drawable/user_image"/>
 
 </RelativeLayout>

@@ -1,10 +1,12 @@
 package com.luofeng.runningman.Adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.luofeng.runningman.R;
@@ -28,6 +30,8 @@ public class RunRecordAdapter extends ArrayAdapter<RunRecord>{
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         TextView dateTime = (TextView) view.findViewById(R.id.item_date_time);
         TextView mode = (TextView) view.findViewById(R.id.item_mode);
+        ImageView deleteImage = (ImageView) view.findViewById(R.id.delete_image);
+        deleteImage.setTag(position);
         dateTime.setText((runRecord.getDateTime()).replace("/", "\t"));
         mode.setText(runRecord.getMode());
         return view;

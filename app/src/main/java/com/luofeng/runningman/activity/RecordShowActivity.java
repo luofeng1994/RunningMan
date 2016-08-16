@@ -2,7 +2,11 @@ package com.luofeng.runningman.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,5 +38,16 @@ public class RecordShowActivity extends Activity {
         modeText.setText(runRecord.getMode());
         timeText.setText(runRecord.getDuration());
         distanceText.setText(runRecord.getDistance());
+
+        String imageName = runRecord.getDateTime().replace("/","-").replace(":", "-");
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile";
+        String fileName = path + "/" + imageName + ".png";
+
+        Log.w("test", fileName);
+        Bitmap imageBitmap = null;
+        if (imageBitmap == null) {
+            imageBitmap = BitmapFactory.decodeFile(fileName, null);
+        }
+        screenshorImage.setImageBitmap(imageBitmap);
     }
 }

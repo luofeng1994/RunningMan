@@ -3,8 +3,10 @@ package com.luofeng.runningman.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +36,10 @@ import com.luofeng.runningman.R;
 import com.luofeng.runningman.db.RunningManDB;
 import com.luofeng.runningman.model.RunRecord;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,7 +47,7 @@ import java.util.Date;
 /**
  * Created by 罗峰 on 2016/8/4.
  */
-public class PutongModeActivity extends Activity implements LocationSource, AMapLocationListener, View.OnClickListener, View.OnLongClickListener {
+public class PutongModeActivity extends Activity implements LocationSource, AMapLocationListener, View.OnClickListener, View.OnLongClickListener, AMap.OnMapScreenShotListener{
     //显示地图需要的变量
     private MapView mapView;//地图控件
     private AMap aMap;//地图对象
@@ -164,28 +170,9 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         switch (view.getId()) {
             case R.id.start_image:
                 if (isFirstClicked) {
-                    new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您还未开始跑步").setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    }).show();
+                    showAskDialog(0);
                 } else {
-                    new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您确定要结束此次跑步吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            mLocationClient.stopLocation();
-                            timeChronometer.stop();
-                            startImage.setImageResource(R.drawable.stop);
-                            startImage.setEnabled(false);
-                            saveRecord();
-                        }
-                    }).setNegativeButton("返回", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    }).show();
+                    showAskDialog(1);
                 }
                 break;
         }
@@ -257,7 +244,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
             if (amapLocation.getErrorCode() == 0) {
                 if (isFirstLoc && !startedRun) {
                     //设置缩放级别
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                     //将地图移动到定位点
                     aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude())));
                     //点击定位按钮 能够将地图的中心移动到定位点
@@ -326,9 +313,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
 
     private double getDistance(LatLng pointLast,LatLng pointNow) {
         float distance = AMapUtils.calculateLineDistance(pointLast, pointNow);
-
         return (double)distance;
-
    }
 
     private void saveRecord() {
@@ -340,11 +325,44 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         runRecord.setDuration(timeChronometer.getText().toString());
         runningManDB.saveRunRecord(runRecord);
     }
+
     private void pauseRun() {
         mLocationClient.stopLocation();
     }
     private void goOnRun() {
         mLocationClient.startLocation();
+    }
+
+    private void showAskDialog(int i) {
+        switch (i) {
+            case 0 :
+                new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您还未开始跑步").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).show();
+                break;
+            case 1:
+                new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您确定要结束此次跑步吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        stopRun();
+                    }
+                }).setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).show();
+                break;
+        }
+    }
+    private void stopRun() {
+        mLocationClient.stopLocation();
+        timeChronometer.stop();
+        startImage.setImageResource(R.drawable.stop);
+        startImage.setEnabled(false);
+        aMap.getMapScreenShot(this);
+        saveRecord();
     }
 
 
@@ -399,4 +417,35 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     }
 
 
+    @Override
+    public void onMapScreenShot(Bitmap bitmap) {
+        try {
+            File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            String fileName = startDateTime.replace("/","-").replace(":", "-");
+            String filepath = folder.getAbsolutePath() + "/" + fileName + ".png";
+            File file = new File(filepath);
+            file.createNewFile();
+
+            FileOutputStream fos = new FileOutputStream(file);
+            boolean b = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            try {
+                fos.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
