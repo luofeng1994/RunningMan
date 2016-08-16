@@ -29,6 +29,7 @@
             android:layout_weight="3">
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -52,6 +53,47 @@
                     android:textColor="#D1D1D1"
                     android:textSize="20sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="235dp"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="/"
+                    android:textColor="#56627c"
+                    android:textSize="45sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/mubiao_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="00.00"
+                        android:textColor="#E88332"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="目标距离"
+                        android:textColor="#E88332"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -103,6 +145,7 @@
                     android:textColor="#D1D1D1"
                     android:textSize="20sp" />
             </LinearLayout>
+
         </RelativeLayout>
 
         <ImageView
@@ -111,7 +154,7 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_weight="2"
-            android:src="@drawable/start" />
+            android:src="@drawable/set_mubiao" />
 
     </LinearLayout>
 </LinearLayout>

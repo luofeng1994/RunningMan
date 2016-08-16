@@ -16,6 +16,7 @@ public class GerenFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //引入我们的布局
-        return inflater.inflate(R.layout.fragment_geren, container, false);
+        View view = inflater.inflate(R.layout.fragment_user, container, false);
+        return view;
     }
 }

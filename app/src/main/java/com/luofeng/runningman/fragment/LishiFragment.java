@@ -3,6 +3,7 @@ package com.luofeng.runningman.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.luofeng.runningman.Adapter.RunRecordAdapter;
 import com.luofeng.runningman.R;
 import com.luofeng.runningman.activity.RecordShowActivity;
 import com.luofeng.runningman.db.RunningManDB;
+import com.luofeng.runningman.db.RunningManOpenHelper;
 import com.luofeng.runningman.model.RunRecord;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import java.util.List;
 /**
  * Created by 罗峰 on 2016/8/13.
  */
-public class LishiFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener {
+public class LishiFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private ListView listView;
     private RunRecordAdapter runRecordAdapter;
@@ -47,6 +49,7 @@ public class LishiFragment extends Fragment implements AdapterView.OnItemClickLi
         listView.setAdapter(runRecordAdapter);
         listView.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
 
         return view;
 
@@ -73,21 +76,36 @@ public class LishiFragment extends Fragment implements AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        clickedRunRecord = runRecordsList.get(i);
+/*        clickedRunRecord = runRecordsList.get(i);
         clickedMessageLayout = (RelativeLayout) view.findViewById(R.id.message_layout);
         clickedDeleteImage = (ImageView) view.findViewById(R.id.delete_image);
         clickedMessageLayout.setOnClickListener(this);
-        clickedDeleteImage.setOnClickListener(this);
-/*
+        clickedDeleteImage.setOnClickListener(this);*/
         RunRecord record = runRecordsList.get(i);
         Intent intent = new Intent(getActivity(), RecordShowActivity.class);
         intent.putExtra("runRecord", record);
         startActivity(intent);
-*/
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+
+        new AlertDialog.Builder(getActivity()).setTitle("警告").setMessage("您是否要删除此次纪录？").setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                int pos = position + 1;
+                deleteData(pos);
+            }
+        }).setNegativeButton("返回", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        }).show();
+        return true;
     }
 
 
-    @Override
+/*    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.message_layout :
@@ -108,5 +126,14 @@ public class LishiFragment extends Fragment implements AdapterView.OnItemClickLi
                 }).show();
                 break;
         }
+    }*/
+
+
+    private void deleteData(int position) {
+        Log.d("test", position + "");
+        RunningManOpenHelper dbHelper = new RunningManOpenHelper(getActivity(), "running_man", null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete("RunRecords", "id = ?", new String[] {String.valueOf(position)});
+        refreshRunRecordsList();
     }
 }

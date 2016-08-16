@@ -39,7 +39,7 @@ public class RecordShowActivity extends Activity {
         timeText.setText(runRecord.getDuration());
         distanceText.setText(runRecord.getDistance());
 
-        String imageName = runRecord.getDateTime().replace("/","-").replace(":", "-");
+        String imageName = runRecord.getDateTime().replace("/", "-").replace(":", "-");
         String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile";
         String fileName = path + "/" + imageName + ".png";
 

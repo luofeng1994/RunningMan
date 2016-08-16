@@ -37,6 +37,7 @@
         </activity>
 
         <activity android:name=".activity.PutongModeActivity"></activity>
+        <activity android:name=".activity.MubiaoModeActivity"></activity>
         <activity android:name=".activity.RecordShowActivity"></activity>
 
     </application>

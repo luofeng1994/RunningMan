@@ -30,8 +30,8 @@ public class RunRecordAdapter extends ArrayAdapter<RunRecord>{
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         TextView dateTime = (TextView) view.findViewById(R.id.item_date_time);
         TextView mode = (TextView) view.findViewById(R.id.item_mode);
-        ImageView deleteImage = (ImageView) view.findViewById(R.id.delete_image);
-        deleteImage.setTag(position);
+/*        ImageView deleteImage = (ImageView) view.findViewById(R.id.delete_image);
+        deleteImage.setTag(position);*/
         dateTime.setText((runRecord.getDateTime()).replace("/", "\t"));
         mode.setText(runRecord.getMode());
         return view;

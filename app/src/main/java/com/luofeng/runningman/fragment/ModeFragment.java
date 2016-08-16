@@ -3,12 +3,14 @@ package com.luofeng.runningman.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.luofeng.runningman.R;
+import com.luofeng.runningman.activity.MubiaoModeActivity;
 import com.luofeng.runningman.activity.PutongModeActivity;
 
 
@@ -27,6 +29,7 @@ public class ModeFragment extends Fragment implements View.OnClickListener{
         mubiaoModeLayout = (RelativeLayout) view.findViewById(R.id.mubiaoMode_layout);
         jianzhiModeLayout = (RelativeLayout) view.findViewById(R.id.jianzhiMode_layout);
         putongModeLayout.setOnClickListener(this);
+        mubiaoModeLayout.setOnClickListener(this);
         return view;
 
     }
@@ -34,12 +37,16 @@ public class ModeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
+        Intent intent = null;
         switch (view.getId()) {
             case R.id.putongMode_layout:
-                Intent intent = new Intent(getActivity(), PutongModeActivity.class);
+                intent = new Intent(getActivity(), PutongModeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mubiaoMode_layout:
+                Log.d("test", "mubiaoMode_layout clicked");
+                intent = new Intent(getActivity(), MubiaoModeActivity.class);
+                startActivity(intent);
                 break;
             case R.id.jianzhiMode_layout:
                 break;

@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +47,7 @@ import java.text.SimpleDateFormat;
 /**
  * Created by 罗峰 on 2016/8/4.
  */
-public class PutongModeActivity extends Activity implements LocationSource, AMapLocationListener, View.OnClickListener, View.OnLongClickListener, AMap.OnMapScreenShotListener{
+public class MubiaoModeActivity extends Activity implements LocationSource, AMapLocationListener, View.OnClickListener, View.OnLongClickListener, AMap.OnMapScreenShotListener {
     //显示地图需要的变量
     private MapView mapView;//地图控件
     private AMap aMap;//地图对象
@@ -59,6 +60,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private ImageView startImage = null;
     private Chronometer timeChronometer = null;
     private TextView distanceText = null;
+    private TextView mubiaoText = null;
     private TextView speedText = null;
     private RunningManDB runningManDB;
 
@@ -68,22 +70,26 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private boolean startedRun = false;
     private boolean paused = true;
     private boolean isFirstClicked = true;
+    private boolean mubiaoSetted = false;
 
-    private int locNum = 0;
     private double speed = 1;
     private double distance = 0;
+    private double mubiaoDis = 0;
     private long recordTime = 0;//计时使用，使得暂停开始之后计时器继续不间断计时
     private LatLng latLngLast = null, latLngNow = null;
     private String startDateTime;
 
     private static final long LOC_INTERVAL = 2000;
-    private static final String MODE = "普通模式";
+    private static final String MODE = "目标模式";
+    private static final int NOT_STARTED_DIALOG = 0;
+    private static final int MUBIAO_GET_DIALOG = 1;
+    private static final int STOP_RUN_DIALOG = 2;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.putong_mode_layout);
+        setContentView(R.layout.mubiao_mode_layout);
         runningManDB = RunningManDB.getInstance(this);
         initView(savedInstanceState);
         //开始第一次定位
@@ -97,6 +103,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         timeChronometer = (Chronometer) findViewById(R.id.chronometer);
         timeChronometer.setFormat("00:%s");
         distanceText = (TextView) findViewById(R.id.distance_text);
+        mubiaoText = (TextView) findViewById(R.id.mubiao_text);
         speedText = (TextView) findViewById(R.id.speed_text);
 
         //显示地图
@@ -131,8 +138,17 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.start_image:
-                //第一次点击开始按钮
-                if (isFirstClicked) {
+                //点击设置目标
+                if (!mubiaoSetted) {
+                    Toast.makeText(this, "set", Toast.LENGTH_SHORT).show();
+                    startImage.setImageResource(R.drawable.start);
+                    inputTitleDialog();
+                    mubiaoSetted = true;
+                }
+                //设置目标之后的第一次点击
+                else if (mubiaoSetted && isFirstClicked) {
+                    Log.d("test", mubiaoDis + "第二次");
+
                     startedRun = true;
                     isFirstClicked = false;
                     paused = false;
@@ -144,7 +160,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                     startDateTime = sDateFormat.format(new java.util.Date());
                 }
                 //暂停状态下点击图片，开始跑步,显示暂停按钮
-                else if (!isFirstClicked && startedRun && paused) {
+                else if (mubiaoSetted && !isFirstClicked && startedRun && paused) {
                     paused = false;
                     startImage.setImageResource(R.drawable.pause);
                     goOnRun();
@@ -152,7 +168,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                     timeChronometer.start();
                 }
                 //跑步状态下点击图片，暂停跑步,显示开始按钮
-                else if (!isFirstClicked && startedRun && !paused) {
+                else if (mubiaoSetted && !isFirstClicked && startedRun && !paused) {
                     paused = true;
                     startImage.setImageResource(R.drawable.start);
                     pauseRun();
@@ -170,9 +186,9 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         switch (view.getId()) {
             case R.id.start_image:
                 if (isFirstClicked) {
-                    showAskDialog(0);
+                    showAskDialog(NOT_STARTED_DIALOG);
                 } else {
-                    showAskDialog(1);
+                    showAskDialog(STOP_RUN_DIALOG);
                 }
                 break;
         }
@@ -294,6 +310,11 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                             speedText.setText(df.format(speed));
                         }
 
+                        if (distance > mubiaoDis) {
+                            //pauseRun();
+                            showAskDialog(MUBIAO_GET_DIALOG);
+                        }
+
 
                     }
                 }
@@ -311,10 +332,10 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     }
 
 
-    private double getDistance(LatLng pointLast,LatLng pointNow) {
+    private double getDistance(LatLng pointLast, LatLng pointNow) {
         float distance = AMapUtils.calculateLineDistance(pointLast, pointNow);
-        return (double)distance;
-   }
+        return (double) distance;
+    }
 
     private void saveRecord() {
         RunRecord runRecord = new RunRecord();
@@ -329,21 +350,36 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private void pauseRun() {
         mLocationClient.stopLocation();
     }
+
     private void goOnRun() {
         mLocationClient.startLocation();
     }
 
     private void showAskDialog(int i) {
         switch (i) {
-            case 0 :
-                new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您还未开始跑步").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            case NOT_STARTED_DIALOG:
+                new AlertDialog.Builder(MubiaoModeActivity.this).setTitle("提示").setMessage("您还未开始跑步").setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 }).show();
                 break;
-            case 1:
-                new AlertDialog.Builder(PutongModeActivity.this).setTitle("提示").setMessage("您确定要结束此次跑步吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            case MUBIAO_GET_DIALOG:
+                pauseRun();
+
+                new AlertDialog.Builder(MubiaoModeActivity.this).setTitle("提示").setMessage("您已完成本次目标，是否继续？").setPositiveButton("继续", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).setNegativeButton("结束", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        stopRun();
+                    }
+                }).show();
+                break;
+            case STOP_RUN_DIALOG:
+                new AlertDialog.Builder(MubiaoModeActivity.this).setTitle("提示").setMessage("您确定要结束此次跑步吗").setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         stopRun();
@@ -356,6 +392,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                 break;
         }
     }
+
     private void stopRun() {
         mLocationClient.stopLocation();
         timeChronometer.stop();
@@ -365,6 +402,23 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
         saveRecord();
     }
 
+    private void inputTitleDialog() {
+
+        final EditText inputServer = new EditText(this);
+        inputServer.setFocusable(true);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("设置本次目标距离").setView(inputServer);
+        builder.setPositiveButton("确定",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        mubiaoDis = Double.parseDouble(inputServer.getText().toString());
+                        mubiaoText.setText(Double.toString(mubiaoDis));
+                    }
+                });
+        builder.show();
+    }
 
     //激活定位
     @Override
@@ -424,7 +478,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
             if (!folder.exists()) {
                 folder.mkdirs();
             }
-            String fileName = startDateTime.replace("/","-").replace(":", "-");
+            String fileName = startDateTime.replace("/", "-").replace(":", "-");
             String filepath = folder.getAbsolutePath() + "/" + fileName + ".png";
             File file = new File(filepath);
             file.createNewFile();
