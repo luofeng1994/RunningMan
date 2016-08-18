@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,13 +11,13 @@
         android:background="@drawable/menu_bg">
 
         <ImageView
+            android:id="@+id/avatar_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/avatar_image"
-            android:layout_marginTop="25dp"
-            android:src="@drawable/default_avatar"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/default_avatar" />
 
         <TextView
             android:id="@+id/nickname_text"
@@ -29,42 +30,58 @@
             android:textColor="#fff" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/set_image"
-            android:src="@drawable/setup"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:id="@+id/nickname_edit_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/avatar_image"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/nickname_text"
+            android:layout_toRightOf="@+id/nickname_text"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/edit"/>
+
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/birthday"/>
+                    android:src="@drawable/birthday" />
+
                 <TextView
                     android:id="@+id/birthday_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="30sp"
+                    android:text="1994.07.17"
                     android:textColor="#56627c"
-                    android:text="1994.07.17"/>
+                    android:textSize="30sp" />
+                <ImageView
+                    android:id="@+id/birthday_edit_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@+id/birthday_text"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/edit_blue"/>
+
             </LinearLayout>
         </LinearLayout>
 
@@ -74,107 +91,160 @@
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/gender"/>
+                    android:src="@drawable/gender" />
+
                 <TextView
                     android:id="@+id/gender_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="30sp"
+                    android:text="男"
                     android:textColor="#56627c"
-                    android:text="男"/>
+                    android:textSize="30sp" />
+                <ImageView
+                    android:id="@+id/gerder_edit_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@+id/gender_text"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/edit_blue"/>
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="280dp"
             android:layout_height="1px"
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/height"/>
+                    android:src="@drawable/height" />
+
                 <TextView
                     android:id="@+id/height_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="30sp"
+                    android:text="180"
                     android:textColor="#56627c"
-                    android:text="180"/>
+                    android:textSize="30sp" />
+
                 <TextView
+                    android:id="@+id/cm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="30sp"
+                    android:text="cm"
                     android:textColor="#56627c"
-                    android:text="cm"/>
+                    android:textSize="30sp" />
+                <ImageView
+                    android:id="@+id/height_edit_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@+id/cm"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/edit_blue"/>
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="280dp"
             android:layout_height="1px"
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/weight"/>
+                    android:src="@drawable/weight" />
+
                 <TextView
                     android:id="@+id/weight_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="30sp"
+                    android:text="64"
                     android:textColor="#56627c"
-                    android:text="64"/>
+                    android:textSize="30sp" />
+
                 <TextView
+                    android:id="@+id/kg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="30sp"
+                    android:text="kg"
                     android:textColor="#56627c"
-                    android:text="kg"/>
+                    android:textSize="30sp" />
+                <ImageView
+                    android:id="@+id/weight_edit_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toRightOf="@+id/kg"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/edit_blue"/>
             </LinearLayout>
         </LinearLayout>
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="baocun"
+            android:layout_weight="0.20" />
     </LinearLayout>
 </LinearLayout>

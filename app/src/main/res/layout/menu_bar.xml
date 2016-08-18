@@ -1,30 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@drawable/menu_bar_bg">
+    android:layout_height="50dp">
 
-    <ImageView
-        android:id="@+id/lishi_image"
+    <LinearLayout
+        android:id="@+id/lishi_image_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginLeft="30dp"
-        android:src="@drawable/lishi_image"/>
-    <ImageView
-        android:id="@+id/paobu_image"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/lishi_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/lishi_image"/>
+        <TextView
+            android:id="@+id/lishi_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#56627c"
+            android:textSize="10sp"
+            android:text="历史纪录"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/paobu_image_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"
-        android:src="@drawable/paobu_image"/>
-    <ImageView
-        android:id="@+id/geren_image"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/paobu_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/paobu_image"/>
+        <TextView
+            android:id="@+id/paobu_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#56627c"
+            android:textSize="10sp"
+            android:text="跑步"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/geren_image_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="30dp"
-        android:src="@drawable/user_image"/>
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/geren_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/user_image"/>
+        <TextView
+            android:id="@+id/geren_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#56627c"
+            android:textSize="10sp"
+            android:text="我的"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

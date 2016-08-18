@@ -19,6 +19,9 @@ import java.util.List;
  */
 public class RunRecordAdapter extends ArrayAdapter<RunRecord>{
     private int resourceId;
+    private static final String PUTONG_MODE = "普通模式";
+    private static final String MUBIAO_MODE = "目标模式";
+    private static final String JIANZHI_MODE = "减脂模式";
 
     public RunRecordAdapter(Context context, int textViewResourceId, List<RunRecord> objects) {
         super(context, textViewResourceId, objects);
@@ -29,11 +32,17 @@ public class RunRecordAdapter extends ArrayAdapter<RunRecord>{
         RunRecord runRecord = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         TextView dateTime = (TextView) view.findViewById(R.id.item_date_time);
-        TextView mode = (TextView) view.findViewById(R.id.item_mode);
+        ImageView modeImage = (ImageView) view.findViewById(R.id.item_mode_image);
 /*        ImageView deleteImage = (ImageView) view.findViewById(R.id.delete_image);
         deleteImage.setTag(position);*/
         dateTime.setText((runRecord.getDateTime()).replace("/", "\t"));
-        mode.setText(runRecord.getMode());
+        String mode = runRecord.getMode();
+        if (mode.equals(PUTONG_MODE))
+            modeImage.setImageResource(R.drawable.putong_tag);
+        else if (mode.equals(MUBIAO_MODE))
+            modeImage.setImageResource(R.drawable.mubiao_tag);
+        else if (mode.equals(JIANZHI_MODE))
+            modeImage.setImageResource(R.drawable.jianzhi_tag);
         return view;
     }
 }

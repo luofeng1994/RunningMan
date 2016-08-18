@@ -5,24 +5,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.model.Text;
 import com.luofeng.runningman.R;
 import com.luofeng.runningman.fragment.GerenFragment;
 import com.luofeng.runningman.fragment.LishiFragment;
 import com.luofeng.runningman.fragment.ModeFragment;
 
 public class MenuActivity extends FragmentActivity implements View.OnClickListener{
-    private ImageView lishiImage;
-    private ImageView paobuImage;
-    private ImageView gerenImage;
+    private LinearLayout lishiImageLayout;
+    private LinearLayout paobuImageLayout;
+    private LinearLayout gerenImageLayout;
     private TextView topText;
 
     private Fragment lishiFragment;
@@ -42,17 +39,17 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void initView() {
-        lishiImage = (ImageView) findViewById(R.id.lishi_image);
-        paobuImage = (ImageView) findViewById(R.id.paobu_image);
-        gerenImage = (ImageView) findViewById(R.id.geren_image);
+        lishiImageLayout = (LinearLayout) findViewById(R.id.lishi_image_layout);
+        paobuImageLayout = (LinearLayout) findViewById(R.id.paobu_image_layout);
+        gerenImageLayout = (LinearLayout) findViewById(R.id.geren_image_layout);
         topText = (TextView) findViewById(R.id.top_text);
     }
 
     private void initEvent() {
 
-        lishiImage.setOnClickListener(this);
-        paobuImage.setOnClickListener(this);
-        gerenImage.setOnClickListener(this);
+        lishiImageLayout.setOnClickListener(this);
+        paobuImageLayout.setOnClickListener(this);
+        gerenImageLayout.setOnClickListener(this);
     }
 
     private void setSelect(int i) {
@@ -61,31 +58,34 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
         hideFragment(transaction);//我们先把所有的Fragment隐藏了，然后下面再开始处理具体要显示的Fragment
         switch (i) {
             case 0:
-                topText.setText("历史纪录");
                 if (lishiFragment == null) {
                     lishiFragment = new LishiFragment();
                     transaction.add(R.id.content_layout, lishiFragment);//将微信聊天界面的Fragment添加到Activity中
                 }else {
                     transaction.show(lishiFragment);
                 }
+                topText.setText("历史纪录");
+
                 break;
             case 1:
-                topText.setText("跑步");
                 if (modeFragment == null) {
                     modeFragment = new ModeFragment();
                     transaction.add(R.id.content_layout, modeFragment);
                 }else {
                     transaction.show(modeFragment);
                 }
+                topText.setText("跑步");
+
                 break;
             case 2:
-                topText.setText("个人中心");
                 if (gerenFragment == null) {
                     gerenFragment = new GerenFragment();
                     transaction.add(R.id.content_layout, gerenFragment);
                 }else {
                     transaction.show(gerenFragment);
                 }
+                topText.setText("个人中心");
+
                 break;
             default:
                 break;
@@ -109,13 +109,13 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.lishi_image://当点击微信按钮时，切换图片为亮色，切换fragment为微信聊天界面
+            case R.id.lishi_image_layout://当点击微信按钮时，切换图片为亮色，切换fragment为微信聊天界面
                 setSelect(0);
                 break;
-            case R.id.paobu_image:
+            case R.id.paobu_image_layout:
                 setSelect(1);
                 break;
-            case R.id.geren_image:
+            case R.id.geren_image_layout:
                 setSelect(2);
                 break;
             default:
