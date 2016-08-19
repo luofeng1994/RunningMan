@@ -10,7 +10,15 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/menu_bg">
 
-        <ImageView
+<!--        <ImageView
+            android:id="@+id/avatar_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/default_avatar" />-->
+        <com.luofeng.runningman.model.RoundImageView
             android:id="@+id/avatar_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -58,8 +66,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/birthday" />
@@ -72,7 +80,7 @@
                     android:layout_marginLeft="30dp"
                     android:text="1994.07.17"
                     android:textColor="#56627c"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
                 <ImageView
                     android:id="@+id/birthday_edit_image"
                     android:layout_width="20dp"
@@ -103,8 +111,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/gender" />
@@ -117,9 +125,9 @@
                     android:layout_marginLeft="30dp"
                     android:text="男"
                     android:textColor="#56627c"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
                 <ImageView
-                    android:id="@+id/gerder_edit_image"
+                    android:id="@+id/gender_edit_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
@@ -147,8 +155,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/height" />
@@ -161,7 +169,7 @@
                     android:layout_marginLeft="30dp"
                     android:text="180"
                     android:textColor="#56627c"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/cm"
@@ -170,7 +178,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="cm"
                     android:textColor="#56627c"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
                 <ImageView
                     android:id="@+id/height_edit_image"
                     android:layout_width="20dp"
@@ -200,8 +208,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/weight" />
@@ -214,7 +222,7 @@
                     android:layout_marginLeft="30dp"
                     android:text="64"
                     android:textColor="#56627c"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/kg"
@@ -223,7 +231,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="kg"
                     android:textColor="#56627c"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
                 <ImageView
                     android:id="@+id/weight_edit_image"
                     android:layout_width="20dp"

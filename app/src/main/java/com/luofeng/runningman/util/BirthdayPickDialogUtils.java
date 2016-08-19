@@ -17,7 +17,7 @@ import java.util.Calendar;
 /**
  * Created by 罗峰 on 2016/8/18.
  */
-public class BirthdayPickDialogUtil implements DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
+public class BirthdayPickDialogUtils implements DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
     private DatePicker datePicker;
     private AlertDialog ad;
     private String dateTime;
@@ -32,7 +32,7 @@ public class BirthdayPickDialogUtil implements DatePicker.OnDateChangedListener,
      * @param initDateTime
      *            初始日期时间值，作为弹出窗口的标题和日期时间初始值
      */
-    public BirthdayPickDialogUtil(Activity activity, String initDateTime) {
+    public BirthdayPickDialogUtils(Activity activity, String initDateTime) {
         this.activity = activity;
         this.initDateTime = initDateTime;
 
@@ -159,4 +159,5 @@ public class BirthdayPickDialogUtil implements DatePicker.OnDateChangedListener,
         }
         return result;
     }
+
 }

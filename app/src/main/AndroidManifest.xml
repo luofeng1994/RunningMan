@@ -38,6 +38,7 @@
         <activity android:name=".activity.MenuActivity"></activity>
         <activity android:name=".activity.PutongModeActivity"></activity>
         <activity android:name=".activity.MubiaoModeActivity"></activity>
+        <activity android:name=".activity.JianzhiModeActivity"></activity>
         <activity android:name=".activity.RecordShowActivity"></activity>
         <activity android:name=".activity.InfoSetActivity"></activity>
 <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
