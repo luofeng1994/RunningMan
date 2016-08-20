@@ -5,8 +5,8 @@
 
     <LinearLayout
         android:id="@+id/lishi_image_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="30dp"
@@ -29,8 +29,8 @@
 
     <LinearLayout
         android:id="@+id/paobu_image_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"
         android:orientation="vertical">
@@ -52,8 +52,8 @@
 
     <LinearLayout
         android:id="@+id/geren_image_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="30dp"
@@ -73,6 +73,32 @@
             android:textSize="10sp"
             android:text="我的"/>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/tag_lishi"
+        android:layout_width="50dp"
+        android:layout_height="6dp"
+        android:background="#56627c"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <ImageView
+        android:id="@+id/tag_paobu"
+        android:layout_width="50dp"
+        android:layout_height="6dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#56627c"/>
+    <ImageView
+        android:id="@+id/tag_geren"
+        android:layout_width="50dp"
+        android:layout_height="6dp"
+        android:layout_marginRight="25dp"
+        android:background="#56627c"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"/>
 
 
 </RelativeLayout>

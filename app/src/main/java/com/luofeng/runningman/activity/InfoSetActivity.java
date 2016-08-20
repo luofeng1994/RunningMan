@@ -2,8 +2,10 @@ package com.luofeng.runningman.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -14,11 +16,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.luofeng.runningman.R;
+import com.luofeng.runningman.model.User;
 import com.luofeng.runningman.util.BirthdayPickDialogUtils;
 import com.luofeng.runningman.util.GenderPickDialogUtils;
 import com.luofeng.runningman.util.HeightPickDialogUtils;
@@ -38,8 +43,15 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     private static final int TAKE_PHOTO = 1;
     private static final int CROP_PHOTO = 2;
 
+    private boolean isUserInfoSetted = false;
+    private static final String INIT_NICKNAME = "昵称";
+    private static final String INIT_BIRTHDAY = "1994.01.01";
+    private static final String INIT_GENDER = "女";
+    private static final String INIT_HEIGHT = "170";
+    private static final String INIT_WEIGHT = "60";
+
     private boolean isFirstTimeIn = true;
-    private ImageView avaterImage;
+    private ImageView avatarImage;
     private ImageView nicknameEditImage;
     private TextView nicknameText;
     private ImageView birthdayEditImage;
@@ -51,6 +63,8 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     private ImageView genderEditImage;
     private TextView genderText;
     private Uri imageUri;
+    private Button saveButton;
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +73,12 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
 
         initView();
         initEvent();
-        setOldAvatar();
+        setOldInfo();
     }
 
     private void initView() {
-        avaterImage = (ImageView) findViewById(R.id.avatar_image);
+        avatarImage = (ImageView) findViewById(R.id.avatar_image);
+        saveButton = (Button) findViewById(R.id.saveUserInfo);
         nicknameText = (TextView) findViewById(R.id.nickname_text);
         birthdayText = (TextView) findViewById(R.id.birthday_text);
         heightText = (TextView) findViewById(R.id.height_text);
@@ -77,7 +92,8 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     }
 
     private void initEvent() {
-        avaterImage.setOnClickListener(this);
+        avatarImage.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
         nicknameEditImage.setOnClickListener(this);
         birthdayEditImage.setOnClickListener(this);
         heightEditImage.setOnClickListener(this);
@@ -85,20 +101,31 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
         genderEditImage.setOnClickListener(this);
     }
 
-    private void setOldAvatar() {
-        Log.d("test", "setOldAvater");
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile";
-        String fileName = path + "/" + FILE_NAME + ".png";
-        File file = new File(fileName);
-        if (!file.exists()) {
-            Log.d("test", "不存在");
-        } else {
-            Log.d("test", "存在");
-            Bitmap imageBitmap = null;
-            if (imageBitmap == null) {
-                imageBitmap = BitmapFactory.decodeFile(fileName, null);
+    private void setOldInfo() {
+
+
+        SharedPreferences pref = getSharedPreferences("user_info", Context.MODE_PRIVATE);
+        isUserInfoSetted = pref.getBoolean("user_info_setted", false);
+        if (isUserInfoSetted) {
+            nicknameText.setText(pref.getString("nickname", INIT_NICKNAME));
+            birthdayText.setText(pref.getString("birthday", INIT_BIRTHDAY));
+            genderText.setText(pref.getString("gender", INIT_GENDER));
+            heightText.setText(pref.getString("height", INIT_HEIGHT));
+            weightText.setText(pref.getString("weight", INIT_WEIGHT));
+
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile";
+            String fileName = path + "/" + FILE_NAME + ".png";
+            File  file = new File(fileName);
+            if (file.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(fileName, null);
+                avatarImage.setImageBitmap(bitmap);
             }
-            avaterImage.setImageBitmap(imageBitmap);
+        } else {
+            nicknameText.setText(INIT_NICKNAME);
+            birthdayText.setText(INIT_BIRTHDAY);
+            genderText.setText(INIT_GENDER);
+            heightText.setText(INIT_HEIGHT);
+            weightText.setText(INIT_WEIGHT);
         }
 
     }
@@ -128,11 +155,28 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
             case R.id.avatar_image:
                 setAvater();
                 break;
+            case R.id.saveUserInfo:
+                saveUserInfo();
+                break;
         }
     }
 
+    private void saveUserInfo() {
+        SharedPreferences.Editor editor = getSharedPreferences("user_info", MODE_PRIVATE).edit();
+
+        user = new User(nicknameText.getText().toString(), birthdayText.getText().toString(), genderText.getText().toString(), heightText.getText().toString(), weightText.getText().toString());
+        editor.putBoolean("user_info_setted", true);
+        editor.putString("nickname", user.getNickname());
+        editor.putString("birthday", user.getBirthday());
+        editor.putString("gender", user.getGender());
+        editor.putString("height", user.getHeight());
+        editor.putString("weight", user.getWeight());
+        editor.commit();
+        Toast.makeText(this, "已保存", Toast.LENGTH_SHORT).show();
+    }
+
     private void setAvater() {
-        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avaterfile");
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile");
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -190,7 +234,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
                 if (resultCode == RESULT_OK) {
                     try {
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                        avaterImage.setImageBitmap(bitmap);
+                        avatarImage.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -198,4 +242,5 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
                 break;
         }
     }
+
 }

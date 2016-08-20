@@ -20,6 +20,9 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
     private LinearLayout lishiImageLayout;
     private LinearLayout paobuImageLayout;
     private LinearLayout gerenImageLayout;
+    private ImageView tagLishi;
+    private ImageView tagPaobu;
+    private ImageView tagGeren;
     private TextView topText;
 
     private Fragment lishiFragment;
@@ -42,6 +45,12 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
         lishiImageLayout = (LinearLayout) findViewById(R.id.lishi_image_layout);
         paobuImageLayout = (LinearLayout) findViewById(R.id.paobu_image_layout);
         gerenImageLayout = (LinearLayout) findViewById(R.id.geren_image_layout);
+        tagLishi = (ImageView) findViewById(R.id.tag_lishi);
+        tagPaobu = (ImageView) findViewById(R.id.tag_paobu);
+        tagGeren = (ImageView) findViewById(R.id.tag_geren);
+        tagLishi.setVisibility(View.INVISIBLE);
+        tagPaobu.setVisibility(View.VISIBLE);
+        tagGeren.setVisibility(View.INVISIBLE);
         topText = (TextView) findViewById(R.id.top_text);
     }
 
@@ -110,12 +119,21 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.lishi_image_layout://当点击微信按钮时，切换图片为亮色，切换fragment为微信聊天界面
+                tagLishi.setVisibility(View.VISIBLE);
+                tagPaobu.setVisibility(View.INVISIBLE);
+                tagGeren.setVisibility(View.INVISIBLE);
                 setSelect(0);
                 break;
             case R.id.paobu_image_layout:
+                tagLishi.setVisibility(View.INVISIBLE);
+                tagPaobu.setVisibility(View.VISIBLE);
+                tagGeren.setVisibility(View.INVISIBLE);
                 setSelect(1);
                 break;
             case R.id.geren_image_layout:
+                tagLishi.setVisibility(View.INVISIBLE);
+                tagPaobu.setVisibility(View.INVISIBLE);
+                tagGeren.setVisibility(View.VISIBLE);
                 setSelect(2);
                 break;
             default:
