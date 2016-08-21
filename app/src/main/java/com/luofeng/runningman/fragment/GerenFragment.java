@@ -18,7 +18,13 @@ import android.widget.TextView;
 import com.luofeng.runningman.R;
 import com.luofeng.runningman.activity.InfoSetActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by 罗峰 on 2016/8/13.
@@ -46,7 +52,6 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         //引入我们的布局
         view = inflater.inflate(R.layout.fragment_user, container, false);
-        Log.d("test", "oncreateView");
         initView();
         initEvent();
         setText();
@@ -71,10 +76,8 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
 
     private void setText() {
 
-        Log.d("test", "genrenActivity, setText");
         SharedPreferences pref = getActivity().getSharedPreferences("user_info", Context.MODE_PRIVATE);
         isUserInfoSetted = pref.getBoolean("user_info_setted", false);
-        Log.d("test", "gerenActivity, isUserInfoSetted:" + isUserInfoSetted);
         if (isUserInfoSetted) {
             nicknameText.setText(pref.getString("nickname", INIT_NICKNAME));
             birthdayText.setText(pref.getString("birthday", INIT_BIRTHDAY));
@@ -83,11 +86,17 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
             weightText.setText(pref.getString("weight", INIT_WEIGHT));
 
             String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile";
-            String fileName = path + "/" + FILE_NAME + ".png";
+            String fileName = path + "/" + FILE_NAME + ".jpg";
             File  file = new File(fileName);
             if (file.exists()) {
+/*                BitmapFactory.Options ops = new BitmapFactory.Options();
+                ops.inSampleSize = 8;
+                Bitmap bitmap = BitmapFactory.decodeFile(fileName, ops);*/
                 Bitmap bitmap = BitmapFactory.decodeFile(fileName, null);
+                Log.d("test", "gerenFragment,width:" + bitmap.getWidth()+","+bitmap.getHeight());
+
                 avatarImage.setImageBitmap(bitmap);
+
             }
 
         } else {
@@ -111,7 +120,7 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
 
     public void onResume() {
         super.onResume();
-        Log.d("test", "onResume");
         setText();
     }
+
 }

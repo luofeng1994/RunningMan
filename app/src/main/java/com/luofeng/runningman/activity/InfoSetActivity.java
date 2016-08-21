@@ -41,7 +41,10 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     private static final String FILE_NAME = "avatar";
     private static final int SET_NICKNAME_TAG = 0;
     private static final int TAKE_PHOTO = 1;
-    private static final int CROP_PHOTO = 2;
+    private static final int CHOOSE_PHOTO = 2;
+    private static final int CROP_PHOTO = 3;
+
+
 
     private boolean isUserInfoSetted = false;
     private static final String INIT_NICKNAME = "昵称";
@@ -49,10 +52,12 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     private static final String INIT_GENDER = "女";
     private static final String INIT_HEIGHT = "170";
     private static final String INIT_WEIGHT = "60";
+    private String[] items = new String[] {"选择本地照片", "拍照"};
 
     private boolean isFirstTimeIn = true;
     private ImageView avatarImage;
     private ImageView nicknameEditImage;
+    private ImageView backImage;
     private TextView nicknameText;
     private ImageView birthdayEditImage;
     private TextView birthdayText;
@@ -73,12 +78,13 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
 
         initView();
         initEvent();
-        setOldInfo();
+        initInfo();
     }
 
     private void initView() {
         avatarImage = (ImageView) findViewById(R.id.avatar_image);
         saveButton = (Button) findViewById(R.id.saveUserInfo);
+        backImage = (ImageView) findViewById(R.id.back_image);
         nicknameText = (TextView) findViewById(R.id.nickname_text);
         birthdayText = (TextView) findViewById(R.id.birthday_text);
         heightText = (TextView) findViewById(R.id.height_text);
@@ -94,6 +100,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     private void initEvent() {
         avatarImage.setOnClickListener(this);
         saveButton.setOnClickListener(this);
+        backImage.setOnClickListener(this);
         nicknameEditImage.setOnClickListener(this);
         birthdayEditImage.setOnClickListener(this);
         heightEditImage.setOnClickListener(this);
@@ -101,7 +108,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
         genderEditImage.setOnClickListener(this);
     }
 
-    private void setOldInfo() {
+    private void initInfo() {
 
 
         SharedPreferences pref = getSharedPreferences("user_info", Context.MODE_PRIVATE);
@@ -114,11 +121,17 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
             weightText.setText(pref.getString("weight", INIT_WEIGHT));
 
             String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile";
-            String fileName = path + "/" + FILE_NAME + ".png";
+            String fileName = path + "/" + FILE_NAME + ".jpg";
             File  file = new File(fileName);
             if (file.exists()) {
+
+/*                BitmapFactory.Options ops = new BitmapFactory.Options();
+                ops.inSampleSize = 8;
+                Bitmap bitmap = BitmapFactory.decodeFile(fileName, ops);*/
                 Bitmap bitmap = BitmapFactory.decodeFile(fileName, null);
                 avatarImage.setImageBitmap(bitmap);
+            } else {
+                avatarImage.setImageResource(R.drawable.default_avatar);
             }
         } else {
             nicknameText.setText(INIT_NICKNAME);
@@ -134,7 +147,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.nickname_edit_image:
-                showMyDialog(SET_NICKNAME_TAG);
+                showNicknameDialog(SET_NICKNAME_TAG);
                 break;
             case R.id.birthday_edit_image:
                 BirthdayPickDialogUtils birthdayPickDialog = new BirthdayPickDialogUtils(this, INIT_DATE);
@@ -153,10 +166,15 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
                 genderPickDialogUtils.genderPickDialog(genderText);
                 break;
             case R.id.avatar_image:
-                setAvater();
+                //setAvater();
+                showAvatarDialog();
+
                 break;
             case R.id.saveUserInfo:
                 saveUserInfo();
+                break;
+            case R.id.back_image:
+                onBackPressed();
                 break;
         }
     }
@@ -175,30 +193,7 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
         Toast.makeText(this, "已保存", Toast.LENGTH_SHORT).show();
     }
 
-    private void setAvater() {
-        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile");
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        String filepath = folder.getAbsolutePath() + "/" + FILE_NAME + ".png";
-        File avatarPhoto = new File(filepath);
-        if (avatarPhoto.exists()) {
-            avatarPhoto.delete();
-        }
-        try {
-            avatarPhoto.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        imageUri = Uri.fromFile(avatarPhoto);//将File对象转换成Uri对象,这个Uri 对象标识着这张图片的唯一地址
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, TAKE_PHOTO);
-
-    }
-
-    private void showMyDialog(int tag) {
+    private void showNicknameDialog(int tag) {
         switch (tag) {
             case SET_NICKNAME_TAG:
                 final EditText nicknameInput = new EditText(this);
@@ -219,21 +214,113 @@ public class InfoSetActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void showAvatarDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("设置头像")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        switch (which) {
+                            case 0:
+                                startAlbum();
+                                break;
+                            case 1:
+                                startCamera();
+                                break;
+                        }
+                    }
+                }).show();
+    }
+
+    private void startCamera() {
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String filepath = folder.getAbsolutePath() + "/" + FILE_NAME + ".jpg";
+        File avatarPhoto = new File(filepath);
+        if (avatarPhoto.exists()) {
+            avatarPhoto.delete();
+        }
+        try {
+            avatarPhoto.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        imageUri = Uri.fromFile(avatarPhoto);//将File对象转换成Uri对象,这个Uri 对象标识着这张图片的唯一地址
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_PHOTO);
+
+    }
+
+    private void startAlbum() {
+        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/RunningManFile/avatarfile");
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String filepath = folder.getAbsolutePath() + "/" + FILE_NAME + ".jpg";
+        File avatarPhoto = new File(filepath);
+        if (avatarPhoto.exists()) {
+            avatarPhoto.delete();
+        }
+        try {
+            avatarPhoto.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        imageUri = Uri.fromFile(avatarPhoto);//将File对象转换成Uri对象,这个Uri 对象标识着这张图片的唯一地址
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        intent.setType("image/*");
+        intent.putExtra("crop",true);
+        intent.putExtra("scale", true);
+        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, CHOOSE_PHOTO);
+    }
+
     protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         switch (requestCode) {
             case TAKE_PHOTO:
+                Log.d("test", "take_photo");
+
                 if (resultCode == RESULT_OK) {
+                    Log.d("test", "take_photo1");
                     Intent intent = new Intent("com.android.camera.action.CROP");
                     intent.setDataAndType(imageUri, "image/*");
+                    intent.putExtra("crop", true);
                     intent.putExtra("scale", true);
+                    intent.putExtra("outputX", 300);
+                    intent.putExtra("outputY", 300);
+                    intent.putExtra("aspectX", 1);
+                    intent.putExtra("aspectY", 1);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     startActivityForResult(intent, CROP_PHOTO);
                 }
                 break;
+            case CHOOSE_PHOTO:
+                Uri tempUri = data.getData();
+                Intent intent = new Intent("com.android.camera.action.CROP");
+                intent.setDataAndType(tempUri, "image/*");
+                intent.putExtra("crop", true);
+                intent.putExtra("scale", true);
+                intent.putExtra("outputX", 300);
+                intent.putExtra("outputY", 300);
+                intent.putExtra("aspectX", 1);
+                intent.putExtra("aspectY", 1);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(intent, CROP_PHOTO);
+                break;
             case CROP_PHOTO:
+                Log.d("test", "crop_photo");
                 if (resultCode == RESULT_OK) {
+                    Log.d("test", resultCode+"");
                     try {
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        Log.d("test", "setInfo,width:" + bitmap.getWidth()+","+bitmap.getHeight());
                         avatarImage.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();

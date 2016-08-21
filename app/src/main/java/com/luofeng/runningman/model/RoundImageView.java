@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -63,8 +64,11 @@ public class RoundImageView extends ImageView {
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
         Bitmap sbmp;
-        if(bmp.getWidth() != radius || bmp.getHeight() != radius)
+        if(bmp.getWidth() != radius || bmp.getHeight() != radius) {
+            //Log.e("test", "radius:" + radius);
+            //Log.e("test", "bmp.getWidht:" + bmp.getWidth());
             sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false);
+        }
         else
             sbmp = bmp;
         Bitmap output = Bitmap.createBitmap(sbmp.getWidth(),

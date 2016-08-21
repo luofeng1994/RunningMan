@@ -51,8 +51,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/birthday"/>
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="25sp"
+                    android:textSize="15sp"
                     android:textColor="#56627c"
                     android:text="1994.07.17"/>
             </LinearLayout>
@@ -83,8 +83,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/gender"/>
@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="25sp"
+                    android:textSize="15sp"
                     android:textColor="#56627c"
                     android:text="男"/>
             </LinearLayout>
@@ -114,8 +114,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/height"/>
@@ -125,14 +125,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="25sp"
+                    android:textSize="15sp"
                     android:textColor="#56627c"
                     android:text="180"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="25sp"
+                    android:textSize="15sp"
                     android:textColor="#56627c"
                     android:text="cm"/>
             </LinearLayout>
@@ -152,8 +152,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/weight"/>
@@ -163,14 +163,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="25sp"
+                    android:textSize="15sp"
                     android:textColor="#56627c"
                     android:text="64"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="25sp"
+                    android:textSize="15sp"
                     android:textColor="#56627c"
                     android:text="kg"/>
             </LinearLayout>
