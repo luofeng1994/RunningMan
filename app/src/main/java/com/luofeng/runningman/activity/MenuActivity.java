@@ -5,18 +5,27 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luofeng.runningman.Adapter.FragAdapter;
 import com.luofeng.runningman.R;
 import com.luofeng.runningman.fragment.GerenFragment;
 import com.luofeng.runningman.fragment.LishiFragment;
 import com.luofeng.runningman.fragment.ModeFragment;
 
-public class MenuActivity extends FragmentActivity implements View.OnClickListener{
+import java.util.ArrayList;
+import java.util.List;
+
+public class MenuActivity extends FragmentActivity implements View.OnClickListener, GestureDetector.OnGestureListener{
     private LinearLayout lishiImageLayout;
     private LinearLayout paobuImageLayout;
     private LinearLayout gerenImageLayout;
@@ -28,17 +37,22 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
     private Fragment lishiFragment;
     private Fragment modeFragment;
     private Fragment gerenFragment;
+
+    private int MARK = 0;
+    private int DISTANCE = 50;
+    private GestureDetector detector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+
+
         initView();
         initEvent();
         setSelect(1);
-
-
+        //detector = new GestureDetector(this, this);
     }
 
     private void initView() {
@@ -52,10 +66,12 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
         tagPaobu.setVisibility(View.VISIBLE);
         tagGeren.setVisibility(View.INVISIBLE);
         topText = (TextView) findViewById(R.id.top_text);
+
+
+
     }
 
     private void initEvent() {
-
         lishiImageLayout.setOnClickListener(this);
         paobuImageLayout.setOnClickListener(this);
         gerenImageLayout.setOnClickListener(this);
@@ -74,7 +90,7 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(lishiFragment);
                 }
                 topText.setText("历史纪录");
-
+                MARK = 0;
                 break;
             case 1:
                 if (modeFragment == null) {
@@ -84,7 +100,7 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(modeFragment);
                 }
                 topText.setText("跑步");
-
+                MARK = 1;
                 break;
             case 2:
                 if (gerenFragment == null) {
@@ -94,7 +110,7 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
                     transaction.show(gerenFragment);
                 }
                 topText.setText("个人中心");
-
+                MARK = 2;
                 break;
             default:
                 break;
@@ -139,5 +155,83 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
             default:
                 break;
         }
+    }
+
+
+/*
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return detector.onTouchEvent(event);
+    }
+*/
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        if (MARK == 0) {
+            if (motionEvent.getX() > motionEvent1.getX() + DISTANCE) {
+                Log.d("test", "右滑");
+
+                tagLishi.setVisibility(View.INVISIBLE);
+                tagPaobu.setVisibility(View.VISIBLE);
+                tagGeren.setVisibility(View.INVISIBLE);
+                setSelect(1);
+                MARK = 1;
+            }
+        } else if (MARK == 1) {
+            if (motionEvent1.getX() > motionEvent.getX() + DISTANCE) {
+                Log.d("test", "右滑");
+
+                tagLishi.setVisibility(View.INVISIBLE);
+                tagPaobu.setVisibility(View.INVISIBLE);
+                tagGeren.setVisibility(View.VISIBLE);
+                setSelect(2);
+                MARK = 2;
+            } else if (motionEvent.getX() > motionEvent1.getX() + DISTANCE) {
+                Log.d("test", "左滑");
+
+                tagLishi.setVisibility(View.VISIBLE);
+                tagPaobu.setVisibility(View.INVISIBLE);
+                tagGeren.setVisibility(View.INVISIBLE);
+                setSelect(0);
+                MARK = 0;
+            }
+
+        } else if (MARK == 2) {
+            if (motionEvent1.getX() > motionEvent.getX() + DISTANCE) {
+                Log.d("test", "左滑");
+
+                tagLishi.setVisibility(View.INVISIBLE);
+                tagPaobu.setVisibility(View.VISIBLE);
+                tagGeren.setVisibility(View.INVISIBLE);
+                setSelect(1);
+                MARK = 1;
+            }
+        }
+        return false;
     }
 }
