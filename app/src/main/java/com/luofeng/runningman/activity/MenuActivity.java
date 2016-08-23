@@ -1,16 +1,20 @@
 package com.luofeng.runningman.activity;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +25,7 @@ import com.luofeng.runningman.R;
 import com.luofeng.runningman.fragment.GerenFragment;
 import com.luofeng.runningman.fragment.LishiFragment;
 import com.luofeng.runningman.fragment.ModeFragment;
+import com.luofeng.runningman.util.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +45,20 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
 
     private int MARK = 0;
     private int DISTANCE = 50;
-    private GestureDetector detector;
+    private SystemBarTintManager tintManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (Build.VERSION.SDK_INT >= 21) {
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintColor(Color.parseColor("#56627c"));
+            tintManager.setStatusBarTintEnabled(true);
+        }
         setContentView(R.layout.activity_main);
-
-
 
         initView();
         initEvent();

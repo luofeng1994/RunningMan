@@ -2,16 +2,26 @@ package com.luofeng.runningman.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.luofeng.runningman.Adapter.ViewPagerAdapter;
 import com.luofeng.runningman.R;
+import com.luofeng.runningman.util.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +36,7 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
     private ImageView[] dots;
     private int[] ids = {R.id.dot_1, R.id.dot_2, R.id.dot_3};
     private ImageView startButton;
+    private SystemBarTintManager tintManager;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -35,7 +46,18 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (Build.VERSION.SDK_INT >= 21) {
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintColor(Color.parseColor("#56627c"));
+            tintManager.setStatusBarTintEnabled(true);
+
+        }
         setContentView(R.layout.lead_page);
+
         initViews();
         initDots();
         // ATTENTION: This was auto-generated to implement the App Indexing API.

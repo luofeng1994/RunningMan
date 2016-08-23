@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import com.amap.api.maps2d.model.PolylineOptions;
 import com.luofeng.runningman.R;
 import com.luofeng.runningman.db.RunningManDB;
 import com.luofeng.runningman.model.RunRecord;
+import com.luofeng.runningman.util.SystemBarTintManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,6 +78,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private long recordTime = 0;//计时使用，使得暂停开始之后计时器继续不间断计时
     private LatLng latLngLast = null, latLngNow = null;
     private String startDateTime;
+    private SystemBarTintManager tintManager;
 
     private static final long LOC_INTERVAL = 2000;
     private static final String MODE = "普通模式";
@@ -83,6 +87,15 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 21) {
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            tintManager = new SystemBarTintManager(this);
+            tintManager.setStatusBarTintColor(Color.parseColor("#56627c"));
+            tintManager.setStatusBarTintEnabled(true);
+
+        }
         setContentView(R.layout.putong_mode_layout);
         runningManDB = RunningManDB.getInstance(this);
         initView(savedInstanceState);
