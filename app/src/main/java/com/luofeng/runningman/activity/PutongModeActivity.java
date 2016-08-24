@@ -72,7 +72,6 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
     private boolean paused = true;
     private boolean isFirstClicked = true;
 
-    private int locNum = 0;
     private double speed = 1;
     private double distance = 0;
     private long recordTime = 0;//计时使用，使得暂停开始之后计时器继续不间断计时

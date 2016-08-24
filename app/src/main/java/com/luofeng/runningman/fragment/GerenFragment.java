@@ -93,7 +93,6 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
                 ops.inSampleSize = 8;
                 Bitmap bitmap = BitmapFactory.decodeFile(fileName, ops);*/
                 Bitmap bitmap = BitmapFactory.decodeFile(fileName, null);
-                Log.d("test", "gerenFragment,width:" + bitmap.getWidth()+","+bitmap.getHeight());
 
                 avatarImage.setImageBitmap(bitmap);
 

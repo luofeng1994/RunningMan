@@ -14,8 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -35,12 +35,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MenuActivity"></activity>
-        <activity android:name=".activity.PutongModeActivity"></activity>
-        <activity android:name=".activity.MubiaoModeActivity"></activity>
-        <activity android:name=".activity.JianzhiModeActivity"></activity>
-        <activity android:name=".activity.RecordShowActivity"></activity>
-        <activity android:name=".activity.InfoSetActivity"></activity>
+        <activity android:name=".activity.MenuActivity"/>
+        <activity android:name=".activity.PutongModeActivity"/>
+        <activity android:name=".activity.MubiaoModeActivity"/>
+        <activity android:name=".activity.JianzhiModeActivity"/>
+        <activity android:name=".activity.RecordShowActivity"/>
+        <activity android:name=".activity.InfoSetActivity"/>
 <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

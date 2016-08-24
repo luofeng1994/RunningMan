@@ -49,14 +49,22 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (Build.VERSION.SDK_INT >= 21) {
-
+/*
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintColor(Color.parseColor("#56627c"));
-            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintEnabled(true);*/
+            if (Build.VERSION.SDK_INT >= 21) {
+                View decorView = getWindow().getDecorView();
+                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                decorView.setSystemUiVisibility(option);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
+
         }
         setContentView(R.layout.activity_main);
 

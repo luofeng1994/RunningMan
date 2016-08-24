@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Created by 罗峰 on 2016/8/17.
  */
-public class GuideActivity extends Activity implements ViewPager.OnPageChangeListener {
+public class GuideActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     private ViewPager vp;
     private ViewPagerAdapter vpAdapter;
     private List<View> views;
@@ -46,14 +46,23 @@ public class GuideActivity extends Activity implements ViewPager.OnPageChangeLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (Build.VERSION.SDK_INT >= 21) {
 
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+/*            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             tintManager = new SystemBarTintManager(this);
             tintManager.setStatusBarTintColor(Color.parseColor("#56627c"));
-            tintManager.setStatusBarTintEnabled(true);
+            tintManager.setStatusBarTintEnabled(true);*/
+            if (Build.VERSION.SDK_INT >= 21) {
+                View decorView = getWindow().getDecorView();
+                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                decorView.setSystemUiVisibility(option);
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
+            }
+            android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
 
         }
         setContentView(R.layout.lead_page);

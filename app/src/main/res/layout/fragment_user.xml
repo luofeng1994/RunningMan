@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="204dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/menu_bg">
 
         <com.luofeng.runningman.model.RoundImageView
+            android:id="@+id/avatar_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/avatar_image"
-            android:layout_marginTop="25dp"
-            android:src="@drawable/default_avatar"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/default_avatar" />
 
         <TextView
             android:id="@+id/nickname_text"
@@ -29,44 +30,46 @@
             android:textColor="#fff" />
 
         <ImageView
+            android:id="@+id/set_image"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:id="@+id/set_image"
-            android:src="@drawable/setup"
-            android:layout_alignTop="@+id/avatar_image"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="21dp"
-            android:layout_marginEnd="21dp" />
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/setup" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/birthday"/>
+                    android:src="@drawable/birthday" />
+
                 <TextView
                     android:id="@+id/birthday_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="15sp"
+                    android:text="1994.07.17"
                     android:textColor="#56627c"
-                    android:text="1994.07.17"/>
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -76,105 +79,121 @@
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/gender"/>
+                    android:src="@drawable/gender" />
+
                 <TextView
                     android:id="@+id/gender_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="15sp"
+                    android:text="男"
                     android:textColor="#56627c"
-                    android:text="男"/>
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="280dp"
             android:layout_height="1px"
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/height"/>
+                    android:src="@drawable/height" />
+
                 <TextView
                     android:id="@+id/height_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="15sp"
+                    android:text="180"
                     android:textColor="#56627c"
-                    android:text="180"/>
+                    android:textSize="15sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="15sp"
+                    android:text="cm"
                     android:textColor="#56627c"
-                    android:text="cm"/>
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
+
         <View
             android:layout_width="280dp"
             android:layout_height="1px"
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
             android:background="@android:color/darker_gray" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/weight"/>
+                    android:src="@drawable/weight" />
+
                 <TextView
                     android:id="@+id/weight_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="30dp"
-                    android:textSize="15sp"
+                    android:text="64"
                     android:textColor="#56627c"
-                    android:text="64"/>
+                    android:textSize="15sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="15sp"
+                    android:text="kg"
                     android:textColor="#56627c"
-                    android:text="kg"/>
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
 

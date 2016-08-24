@@ -2,31 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:clipToPadding="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="204dp"
+        android:layout_height="270dp"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/menu_bg">
+        android:background="#56627c">
 
-<!--        <ImageView
-            android:id="@+id/avatar_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
-            android:src="@drawable/default_avatar" />-->
+        <!--        <ImageView
+                    android:id="@+id/avatar_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/default_avatar" />-->
         <com.luofeng.runningman.model.RoundImageView
             android:id="@+id/avatar_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="95dp"
             android:src="@drawable/default_avatar" />
 
         <TextView
@@ -44,29 +42,30 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_below="@+id/avatar_image"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:layout_toEndOf="@+id/nickname_text"
             android:layout_toRightOf="@+id/nickname_text"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/edit"/>
+            android:src="@drawable/edit" />
 
         <ImageView
+            android:id="@+id/back_image"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/back_image"
-            android:layout_alignTop="@+id/avatar_image"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="19dp"
-            android:layout_marginStart="19dp"
-            android:src="@drawable/back"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/back" />
 
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -95,14 +94,15 @@
                     android:text="1994.07.17"
                     android:textColor="#56627c"
                     android:textSize="15sp" />
+
                 <ImageView
                     android:id="@+id/birthday_edit_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@+id/birthday_text"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/edit_blue"/>
+                    android:layout_toRightOf="@+id/birthday_text"
+                    android:src="@drawable/edit_blue" />
 
             </LinearLayout>
         </LinearLayout>
@@ -140,14 +140,15 @@
                     android:text="男"
                     android:textColor="#56627c"
                     android:textSize="15sp" />
+
                 <ImageView
                     android:id="@+id/gender_edit_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@+id/gender_text"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/edit_blue"/>
+                    android:layout_toRightOf="@+id/gender_text"
+                    android:src="@drawable/edit_blue" />
             </LinearLayout>
         </LinearLayout>
 
@@ -193,14 +194,15 @@
                     android:text="cm"
                     android:textColor="#56627c"
                     android:textSize="15sp" />
+
                 <ImageView
                     android:id="@+id/height_edit_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@+id/cm"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/edit_blue"/>
+                    android:layout_toRightOf="@+id/cm"
+                    android:src="@drawable/edit_blue" />
             </LinearLayout>
         </LinearLayout>
 
@@ -246,28 +248,32 @@
                     android:text="kg"
                     android:textColor="#56627c"
                     android:textSize="15sp" />
+
                 <ImageView
                     android:id="@+id/weight_edit_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_toRightOf="@+id/kg"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/edit_blue"/>
+                    android:layout_toRightOf="@+id/kg"
+                    android:src="@drawable/edit_blue" />
             </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:orientation="vertical">
+
         <Button
             android:id="@+id/saveUserInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="#56627c"
             android:text="保存"
-            android:layout_weight="0.20" />
+            android:textColor="#fff" />
     </LinearLayout>
 </LinearLayout>
