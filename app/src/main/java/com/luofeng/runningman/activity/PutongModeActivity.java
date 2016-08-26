@@ -149,7 +149,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                     isFirstClicked = false;
                     paused = false;
                     startRun();
-                    startImage.setImageResource(R.drawable.pause);
+                    startImage.setImageResource(R.drawable.pause_button_skin);
                     timeChronometer.setBase(SystemClock.elapsedRealtime());
                     timeChronometer.start();
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");//!!hh:mm:ss则获取的是12小时制，HH:mm:ss则获取的是24小时制
@@ -158,7 +158,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                 //暂停状态下点击图片，开始跑步,显示暂停按钮
                 else if (!isFirstClicked && startedRun && paused) {
                     paused = false;
-                    startImage.setImageResource(R.drawable.pause);
+                    startImage.setImageResource(R.drawable.pause_button_skin);
                     goOnRun();
                     timeChronometer.setBase(SystemClock.elapsedRealtime() - recordTime);
                     timeChronometer.start();
@@ -166,7 +166,7 @@ public class PutongModeActivity extends Activity implements LocationSource, AMap
                 //跑步状态下点击图片，暂停跑步,显示开始按钮
                 else if (!isFirstClicked && startedRun && !paused) {
                     paused = true;
-                    startImage.setImageResource(R.drawable.start);
+                    startImage.setImageResource(R.drawable.start_button_skin);
                     pauseRun();
                     timeChronometer.stop();
                     recordTime = SystemClock.elapsedRealtime() - timeChronometer.getBase();

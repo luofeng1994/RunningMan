@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -66,6 +67,7 @@ public class MubiaoModeActivity extends Activity implements LocationSource, AMap
     private TextView mubiaoText = null;
     private TextView speedText = null;
     private RunningManDB runningManDB;
+    private AlertDialog mubiaoSetDialog;
 
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
@@ -153,20 +155,18 @@ public class MubiaoModeActivity extends Activity implements LocationSource, AMap
             case R.id.start_image:
                 //点击设置目标
                 if (!mubiaoSetted) {
-                    Toast.makeText(this, "set", Toast.LENGTH_SHORT).show();
-                    startImage.setImageResource(R.drawable.start);
+                    startImage.setImageResource(R.drawable.start_button_skin);
                     inputTitleDialog();
                     mubiaoSetted = true;
                 }
                 //设置目标之后的第一次点击
                 else if (mubiaoSetted && isFirstClicked) {
-                    Log.d("test", mubiaoDis + "第二次");
 
                     startedRun = true;
                     isFirstClicked = false;
                     paused = false;
                     startRun();
-                    startImage.setImageResource(R.drawable.pause);
+                    startImage.setImageResource(R.drawable.pause_button_skin);
                     timeChronometer.setBase(SystemClock.elapsedRealtime());
                     timeChronometer.start();
                     SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd/HH:mm:ss");//!!hh:mm:ss则获取的是12小时制，HH:mm:ss则获取的是24小时制
@@ -175,7 +175,7 @@ public class MubiaoModeActivity extends Activity implements LocationSource, AMap
                 //暂停状态下点击图片，开始跑步,显示暂停按钮
                 else if (mubiaoSetted && !isFirstClicked && startedRun && paused) {
                     paused = false;
-                    startImage.setImageResource(R.drawable.pause);
+                    startImage.setImageResource(R.drawable.pause_button_skin);
                     goOnRun();
                     timeChronometer.setBase(SystemClock.elapsedRealtime() - recordTime);
                     timeChronometer.start();
@@ -183,7 +183,7 @@ public class MubiaoModeActivity extends Activity implements LocationSource, AMap
                 //跑步状态下点击图片，暂停跑步,显示开始按钮
                 else if (mubiaoSetted && !isFirstClicked && startedRun && !paused) {
                     paused = true;
-                    startImage.setImageResource(R.drawable.start);
+                    startImage.setImageResource(R.drawable.start_button_skin);
                     pauseRun();
                     timeChronometer.stop();
                     recordTime = SystemClock.elapsedRealtime() - timeChronometer.getBase();
@@ -416,7 +416,6 @@ public class MubiaoModeActivity extends Activity implements LocationSource, AMap
     }
 
     private void inputTitleDialog() {
-
         final EditText inputServer = new EditText(this);
         inputServer.setFocusable(true);
 
@@ -426,8 +425,10 @@ public class MubiaoModeActivity extends Activity implements LocationSource, AMap
                 new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        mubiaoDis = Double.parseDouble(inputServer.getText().toString());
-                        mubiaoText.setText(Double.toString(mubiaoDis));
+                        if (!TextUtils.isEmpty(inputServer.getText().toString())) {
+                            mubiaoDis = Double.parseDouble(inputServer.getText().toString());
+                            mubiaoText.setText(Double.toString(mubiaoDis));
+                        }
                     }
                 });
         builder.show();
