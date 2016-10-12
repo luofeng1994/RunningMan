@@ -38,6 +38,7 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
     private int[] ids = {R.id.dot_1, R.id.dot_2, R.id.dot_3};
     private ImageView startButton;
     private SystemBarTintManager tintManager;
+    
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
