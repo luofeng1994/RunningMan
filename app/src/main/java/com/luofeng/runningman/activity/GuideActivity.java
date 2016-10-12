@@ -10,6 +10,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,24 +47,15 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
 
-/*            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            tintManager = new SystemBarTintManager(this);
-            tintManager.setStatusBarTintColor(Color.parseColor("#56627c"));
-            tintManager.setStatusBarTintEnabled(true);*/
-            if (Build.VERSION.SDK_INT >= 21) {
-                View decorView = getWindow().getDecorView();
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-                decorView.setSystemUiVisibility(option);
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
-            }
             android.support.v7.app.ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
-
         }
         setContentView(R.layout.lead_page);
 
@@ -111,13 +103,13 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
 
     @Override
     public void onPageSelected(int position) {
-         for (int i = 0; i < dots.length; i++) {
-             if (position == i) {
-                 dots[i].setImageResource(R.drawable.dot_selected);
-             } else {
-                 dots[i].setImageResource(R.drawable.dot_normal);
-             }
-         }
+        for (int i = 0; i < dots.length; i++) {
+            if (position == i) {
+                dots[i].setImageResource(R.drawable.dot_selected);
+            } else {
+                dots[i].setImageResource(R.drawable.dot_normal);
+            }
+        }
     }
 
     @Override

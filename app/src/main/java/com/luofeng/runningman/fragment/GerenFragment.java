@@ -30,7 +30,6 @@ import java.io.OutputStream;
  * Created by 罗峰 on 2016/8/13.
  */
 public class GerenFragment extends Fragment implements View.OnClickListener {
-
     private View view;
     private ImageView setImage;
     private ImageView avatarImage;
@@ -51,6 +50,7 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //引入我们的布局
+        Log.d("test", "oncreateView");
         view = inflater.inflate(R.layout.fragment_user, container, false);
         initView();
         initEvent();
@@ -89,9 +89,6 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
             String fileName = path + "/" + FILE_NAME + ".jpg";
             File  file = new File(fileName);
             if (file.exists()) {
-/*                BitmapFactory.Options ops = new BitmapFactory.Options();
-                ops.inSampleSize = 8;
-                Bitmap bitmap = BitmapFactory.decodeFile(fileName, ops);*/
                 Bitmap bitmap = BitmapFactory.decodeFile(fileName, null);
 
                 avatarImage.setImageBitmap(bitmap);
@@ -119,7 +116,7 @@ public class GerenFragment extends Fragment implements View.OnClickListener {
 
     public void onResume() {
         super.onResume();
-        setText();
+        //setText();
     }
 
 }
